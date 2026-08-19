@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Create your account</title>
+</head>
+<body>
+	<main class="form-card">
+		<h1>Create your account</h1>
+		<p class="intro">Enter your details to register.</p>
+
+		<form id="registrationForm" novalidate>
+			<div class="field">
+				<label for="name">Name</label>
+				<input id="name" name="name" type="text" autocomplete="name">
+				<p class="error" id="nameError"></p>
+			</div>
+			<div class="field">
+				<label for="email">Email</label>
+				<input id="email" name="email" type="email" autocomplete="email">
+				<p class="error" id="emailError"></p>
+			</div>
+			<div class="field">
+				<label for="password">Password</label>
+				<input id="password" name="password" type="password" autocomplete="new-password">
+				<p class="error" id="passwordError"></p>
+			</div>
+			<div class="field">
+				<label for="confirmPassword">Re-enter password</label>
+				<input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password">
+				<p class="error" id="confirmPasswordError"></p>
+			</div>
+			<div class="field">
+				<label for="mobile">Mobile number</label>
+				<input id="mobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel">
+				<p class="error" id="mobileError"></p>
+			</div>
+			<button type="submit">Submit</button>
+			<p class="success" id="successMessage" role="status"></p>
+		</form>
+	</main>
+
+	<script>
+		const form = document.getElementById("registrationForm");
+
+		function showError(inputId, message) {
+			const input = document.getElementById(inputId);
+			const errorText = document.getElementById(inputId + "Error");
+
+			input.classList.toggle("invalid", message !== "");
+			errorText.textContent = message;
+		}
+
+		form.addEventListener("submit", function (event) {
+			event.preventDefault();
+
+			const name = document.getElementById("name").value.trim();
+			const email = document.getElementById("email").value.trim();
+			const password = document.getElementById("password").value;
+			const confirmPassword = document.getElementById("confirmPassword").value;
+			const mobile = document.getElementById("mobile").value.trim();
+			let formIsValid = true;
+
+			showError("name", "");
+			showError("email", "");
+			showError("password", "");
+			showError("confirmPassword", "");
+			showError("mobile", "");
+			document.getElementById("successMessage").textContent = "";
+
+			if (name === "") {
+				showError("name", "Please enter your name.");
+				formIsValid = false;
+			}
+
+			if (!email.includes("@") || !email.includes(".")) {
+				showError("email", "Please enter a valid email address.");
+				formIsValid = false;
+			}
+
+			if (password.length < 8) {
+				showError("password", "Password must be at least 8 characters.");
+				formIsValid = false;
+			}
+
+			if (password !== confirmPassword || confirmPassword === "") {
+				showError("confirmPassword", "Passwords do not match.");
+				formIsValid = false;
+			}
+
+			if (!/^\d{10}$/.test(mobile)) {
+				showError("mobile", "Mobile number must contain 10 digits.");
+				formIsValid = false;
+			}
+
+			if (formIsValid) {
+				document.getElementById("successMessage").textContent = "Registration successful!";
+				form.reset();
+			}
+		});
+	</script>
+</body>
+</html>
